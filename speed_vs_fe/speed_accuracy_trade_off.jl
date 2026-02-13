@@ -157,23 +157,21 @@ markers = [:circle, :square, :diamond, :utriangle]
 colors = [:red, :orange, :steelblue, :blue]
 
 subplots = []
-bs_labels = map(log, batch_sizes)
-@show bs_labels
-
 
 for (w, wlabel, m, c) in zip(speed_weights, weight_labels, markers, colors)
     combined = w .* tr_norm .+ fe_norm
     combined = combined ./ maximum(combined)
     best_idx = argmin(combined)
 
-    p = plot(bs_labels, combined,
+    p = plot(batch_sizes, combined,
         ylabel = "Cost", xlabel = "Batch size",
         title = wlabel,
+        xticks = batch_sizes,
         marker = m, markersize = 5, linewidth = 2, color = c,
         legend = false)
-    scatter!([bs_labels[best_idx]], [combined[best_idx]],
+    scatter!([batch_sizes[best_idx]], [combined[best_idx]],
         marker = :star5, markersize = 12, color = :green)
-    annotate!(best_idx, combined[best_idx] + 0.05 * maximum(combined),
+    annotate!(batch_sizes[best_idx], combined[best_idx] + 0.05 * maximum(combined),
         text("bs=$(results[best_idx].batch_size)", 8, :green))
 
     push!(subplots, p)

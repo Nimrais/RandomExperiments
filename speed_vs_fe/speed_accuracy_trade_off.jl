@@ -157,8 +157,11 @@ markers = [:circle, :square, :diamond, :utriangle]
 colors = [:red, :orange, :steelblue, :blue]
 
 subplots = []
+bs_labels = map(string, batch_sizes)
+
 for (w, wlabel, m, c) in zip(speed_weights, weight_labels, markers, colors)
     combined = w .* tr_norm .+ fe_norm
+    combined = combined ./ maximum(combined)
     best_idx = argmin(combined)
 
     p = plot(bs_labels, combined,
